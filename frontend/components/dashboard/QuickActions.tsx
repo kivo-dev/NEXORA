@@ -20,7 +20,7 @@ type QuickActionsProps = {
 const DEFAULT_ACTIONS: QuickAction[] = [
   {
     id: "connect-wallet",
-    label: "Connect wallet",
+    label: "Submit Wallet",
     description: "Track another address",
     icon: PlusCircle,
   },

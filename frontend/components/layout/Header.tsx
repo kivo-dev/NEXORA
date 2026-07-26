@@ -40,7 +40,7 @@ export function Header() {
             href="/connect"
             className="px-4 py-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#4A7BFF] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0A0A0F]"
           >
-            Connect Wallet
+            Submit Wallet
           </Button>
         </div>
 
@@ -81,7 +81,7 @@ export function Header() {
             Trust
           </a>
           <Button href="/connect" className="mt-2 px-4 py-2.5 text-center">
-            Connect Wallet
+           Submit Wallet
           </Button>
         </nav>
       </div>

@@ -2,7 +2,7 @@
 
 import { HeroAnimation } from "./HeroAnimation";
 import { FeatureList } from "./FeatureList";
-import { ConnectWalletButton } from "./ConnectWalletButton";
+import { SubmitWalletButton } from "./SubmitWalletButton";
 
 export function EmptyDashboard() {
   return (
@@ -31,7 +31,7 @@ export function EmptyDashboard() {
 
         {/* CTAs */}
         <div className="flex flex-col items-center justify-center gap-3 sm:flex-row">
-          <ConnectWalletButton />
+          <SubmitWalletButton />
           <a
             href="#"
             className="inline-flex items-center justify-center rounded-lg border border-[#2A2A3A] bg-transparent px-6 py-3 text-sm font-medium text-[#A0A0B8] transition-all duration-200 hover:border-[#4A7BFF]/30 hover:bg-[#13131A] hover:text-white"
