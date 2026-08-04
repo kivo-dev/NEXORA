@@ -1,6 +1,5 @@
 import { Button } from "@/components/ui/Button";
-import { PortfolioHealthCard } from "@/components/home/PortfolioHealthCard";
-
+import { BlockchainOrb } from "@/components/home/BlockchainOrb";
 export function HeroSection() {
   return (
     <section className="relative overflow-hidden">
@@ -123,11 +122,11 @@ export function HeroSection() {
           </div>
 
           {/* The card itself, gently tilted, straightens on hover */}
-          <div className="relative rotate-1 transition-transform duration-500 ease-out hover:-translate-y-1 hover:rotate-0">
-            <PortfolioHealthCard />
+          <div className="relative">
+            <BlockchainOrb />
+          </div>
           </div>
         </div>
-      </div>
     </section>
   );
 }
