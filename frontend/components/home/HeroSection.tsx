@@ -1,132 +1,152 @@
-import { Button } from "@/components/ui/Button";
-import { BlockchainOrb } from "@/components/home/BlockchainOrb";
-export function HeroSection() {
+"use client";
+
+import React, { useRef, useEffect } from "react";
+import { motion, useScroll, useTransform, useMotionValue, useSpring } from "framer-motion";
+import Link from "next/link";
+import { GalaxyScene3D } from "@/components/home/GalaxyScene3D";
+import { StarsBackground } from"@/components/home/StarsBackground"; 
+export function HeroSection(): React.ReactElement {
+  const sectionRef = useRef<HTMLElement>(null);
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+  
+  const smoothX = useSpring(mouseX, { damping: 30, stiffness: 150 });
+  const smoothY = useSpring(mouseY, { damping: 30, stiffness: 150 });
+
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start start", "end start"],
+  });
+  
+  const parallaxY = useTransform(scrollYProgress, [0, 1], [0, -50]);
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      const x = (e.clientX / window.innerWidth - 0.5) * 6;
+      const y = (e.clientY / window.innerHeight - 0.5) * 6;
+      mouseX.set(x);
+      mouseY.set(y);
+    };
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, [mouseX, mouseY]);
+
   return (
-    <section className="relative overflow-hidden">
-      <style>{`
-        @keyframes fadeInUp {
-          from { opacity: 0; transform: translateY(14px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        .fade-in-up { animation: fadeInUp 0.7s ease-out both; }
-      `}</style>
+    <section
+      ref={sectionRef}
+      className="relative flex min-h-[90dvh]items-center overflow-hidden bg-transparent"
+    >
+      <StarsBackground />
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0">
+        <div className="absolute left-[-10%] top-[-10%] h-[500px] w-[500px] rounded-full bg-[radial-gradient(circle,rgba(168,85,247,0.08),transparent_70%)] blur-[100px]" />
+        <div className="absolute bottom-[-10%] right-[-10%] h-[400px] w-[400px] rounded-full bg-[radial-gradient(circle,rgba(59,130,246,0.06),transparent_70%)] blur-[100px]" />
+      </div>
 
-      {/* Ambient top wash */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute left-1/2 top-[-10rem] h-[36rem] w-[36rem] -translate-x-1/2 rounded-full bg-gradient-to-br from-[#4A7BFF] to-[#6C5CE7] opacity-20 blur-[120px]"
-      />
-
-      {/* Subtle analytics grid backdrop */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 [background-image:radial-gradient(rgba(255,255,255,0.05)_1px,transparent_1px)] [background-size:34px_34px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,black,transparent)]"
-      />
-
-      <div className="relative mx-auto grid max-w-7xl items-center gap-16 px-6 pb-24 pt-20 sm:pt-28 md:gap-20 lg:grid-cols-2 lg:gap-16 lg:px-8 lg:pb-32 lg:pt-32">
-        {/* Left column — headline, copy, CTAs */}
-        <div>
-          <span
-            className="fade-in-up inline-flex items-center gap-2 rounded-full border border-[#38384A] bg-[#13131A] px-3 py-1 text-xs font-medium text-[#A0A0B8]"
-            style={{ animationDelay: "0ms" }}
+      <div className="relative z-10 mx-auto w-full max-w-[1400px] px-6 py-24 lg:px-16 lg:py-0">
+        <div className="grid min-h-[90dvh] grid-cols-1 items-center gap-16 lg:grid-cols-2">
+          <motion.div
+            className="flex flex-col items-center justify-center text-center lg:items-start lg:text-left"
+            style={{ y: parallaxY }}
           >
-            <span className="h-1.5 w-1.5 rounded-full bg-[#4A7BFF]" />
-            AI financial intelligence for Stellar
-          </span>
+            <motion.div style={{ x: smoothX, y: smoothY }}>
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, ease: "easeOut" }}
+                className="mb-8 inline-flex items-center gap-2 rounded-full border border-white/[0.06] bg-white/[0.03] px-4 py-1.5 text-xs font-medium tracking-wide text-purple-300/80 backdrop-blur-md"
+              > 
+                <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-purple-400" />
+                AI-Powered Financial Intelligence
+              </motion.div>
 
-          <h1
-            className="fade-in-up mt-6 text-balance text-4xl font-semibold leading-[1.1] tracking-tight sm:text-5xl lg:text-[58px]"
-            style={{ animationDelay: "80ms" }}
-          >
-            Your wallet shows transactions.
-            <br />
-            <span className="bg-gradient-to-r from-[#4A7BFF] to-[#6C5CE7] bg-clip-text text-transparent">
-              Nexora
-            </span>{" "}
-            shows what they mean.
-          </h1>
+              <motion.h1
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, ease: "easeOut", delay: 0.05 }}
+                className="text-balance text-4xl font-semibold tracking-tight text-white sm:text-5xl lg:text-6xl xl:text-7xl lg:leading-[1.08]"
+              >See Beyond
+                
+                <br />
+                {" "}
+                <span className="bg-gradient-to-r from-purple-400 via-blue-400 to-cyan-300 bg-clip-text text-transparent">
+                  Your Assets
+                </span>
+                <br />
+                Reveal Hidden Insights
+              </motion.h1>
 
-          <p
-            className="fade-in-up mt-6 max-w-xl text-lg leading-relaxed text-[#A0A0B8]"
-            style={{ animationDelay: "160ms" }}
-          >
-            Connect a Stellar wallet — read-only, nothing to sign — and Nexora
-            turns your balances, activity, and fees into a financial picture
-            you can actually understand. Every figure is computed
-            deterministically. Every claim is traceable back to the
-            transaction behind it.
-          </p>
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.7, ease: "easeOut", delay: 0.2 }}
+                className="mt-6 max-w-md text-base leading-relaxed text-white/45 sm:text-lg"
+              >
+                Nexora transforms blockchain data into clear, explainable and
+                trustworthy financial intelligence powered by ai...
+              </motion.p>
 
-          <div
-            className="fade-in-up mt-9 flex flex-col gap-3 sm:flex-row sm:items-center"
-            style={{ animationDelay: "240ms" }}
-          >
-            <Button
-              href="/dashboard"
-              className="px-6 py-3 text-center shadow-lg shadow-[#4A7BFF]/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#4A7BFF] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0A0A0F]"
-            >
-              Enter Dashboard
-            </Button>
-            <Button
-              href="/#features"
-              variant="outline"
-              className="px-6 py-3 text-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#4A7BFF] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0A0A0F]"
-            >
-              Explore Features
-            </Button>
-          </div>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.7, ease: "easeOut", delay: 0.35 }}
+                className="mt-10 flex w-full flex-col gap-3 sm:flex-row sm:justify-center lg:justify-start"
+              >
+                <Link
+                  href="/dashboard"
+                  className="group inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-purple-600 to-blue-600 px-8 py-3.5 text-sm font-semibold text-white shadow-lg shadow-purple-500/20 transition-all duration-300 hover:shadow-purple-500/30 hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-400/50"
+                >
+                  Get Started
+                  <svg
+                    className="ml-2 h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  </svg>
+                </Link>
+                <Link
+                  href="/#features"
+                  className="inline-flex items-center justify-center rounded-xl border border-white/[0.08] bg-transparent px-8 py-3.5 text-sm font-medium text-white/70 transition-all duration-300 hover:bg-white/[0.04] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/20"
+                >
+                  Learn More
+                </Link>
+              </motion.div>
 
-          <div
-            className="fade-in-up mt-6 flex flex-col gap-2 border-t border-[#2A2A3A] pt-5 text-xs text-[#6B6B80] sm:flex-row sm:items-center sm:gap-6"
-            style={{ animationDelay: "300ms" }}
-          >
-            <span className="flex items-center gap-1.5">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#3DBD7A" strokeWidth={2} aria-hidden="true">
-                <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
-              </svg>
-              Read-only, non-custodial
-            </span>
-            <span className="flex items-center gap-1.5">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#3DBD7A" strokeWidth={2} aria-hidden="true">
-                <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
-              </svg>
-              Deterministic math, always verifiable
-            </span>
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.6, delay: 0.5 }}
+                className="mt-10 flex items-center justify-center gap-6 text-xs text-white/30 lg:justify-start"
+              >
+                <span className="flex items-center gap-1.5">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+                  </svg>
+                  Read-only
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+                  </svg>
+                  Explainable
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+                  </svg>
+                  Secure
+                </span>
+              </motion.div>
+            </motion.div>
+          </motion.div>
+
+          <div className="relative flex h-[50vh] w-full items-center justify-center lg:h-full">
+            <GalaxyScene3D />
           </div>
         </div>
-
-        {/* Right column — floating AI analytics visual */}
-        <div
-          className="fade-in-up relative mx-auto w-full max-w-md lg:mx-0 lg:max-w-none"
-          style={{ animationDelay: "200ms" }}
-        >
-          {/* Local ambient glow behind the visual */}
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute -inset-8 rounded-[2.5rem] bg-gradient-to-br from-[#4A7BFF]/25 via-[#6C5CE7]/10 to-transparent blur-3xl"
-          />
-
-          {/* Stacked ghost card for depth */}
-          <div
-            aria-hidden="true"
-            className="absolute inset-x-8 top-8 bottom-0 -z-10 rotate-3 rounded-2xl border border-[#2A2A3A]/50 bg-[#13131A]/40 blur-[1px]"
-          />
-
-          {/* Floating trust chips — desktop only, keeps mobile uncluttered */}
-          <div className="absolute -left-4 top-8 z-10 hidden items-center gap-2 rounded-full border border-[#2A2A3A] bg-[#13131A]/90 px-3 py-1.5 text-xs font-medium text-[#A0A0B8] shadow-xl shadow-black/40 backdrop-blur-sm lg:flex">
-            <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-[#3DBD7A]" />
-            Live on-chain read
-          </div>
-          <div className="absolute -right-4 bottom-16 z-10 hidden items-center gap-2 rounded-full border border-[#2A2A3A] bg-[#13131A]/90 px-3 py-1.5 text-xs font-medium text-[#A0A0B8] shadow-xl shadow-black/40 backdrop-blur-sm lg:flex">
-            Verified against source data
-          </div>
-
-          {/* The card itself, gently tilted, straightens on hover */}
-          <div className="relative">
-            <BlockchainOrb />
-          </div>
-          </div>
-        </div>
+      </div>
     </section>
   );
 }
