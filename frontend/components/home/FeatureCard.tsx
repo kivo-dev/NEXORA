@@ -1,26 +1,38 @@
-import { FeatureIcon } from "@/components/ui/FeatureIcon";
+import type { ReactNode } from 'react';
 
-export type Feature = {
+type Accent = 'blue' | 'cyan' | 'teal' | 'indigo' | 'pink' | 'white';
+
+const ACCENT_VAR: Record<Accent, string> = {
+  blue: 'var(--nx-neon-blue)',
+  cyan: 'var(--nx-neon-cyan)',
+  teal: 'var(--nx-neon-teal)',
+  indigo: 'var(--nx-neon-indigo)',
+  pink: 'var(--nx-neon-pink)',
+  white: 'var(--nx-neon-white)',
+};
+
+export default function FeatureCard({
+  icon,
+  title,
+  description,
+  accent = 'blue',
+}: {
+  icon: ReactNode;
   title: string;
   description: string;
-  icon: React.ReactNode;
-};
-
-type FeatureCardProps = {
-  feature: Feature;
-};
-
-export function FeatureCard({ feature }: FeatureCardProps) {
+  accent?: Accent;
+}) {
   return (
-    <div className="rounded-xl border border-[#2A2A3A] bg-[#13131A] p-6 transition-colors hover:border-[#38384A] hover:bg-[#1C1C26]">
-      <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#1A2B4A]">
-        <FeatureIcon>{feature.icon}</FeatureIcon>
-      </div>
-      <h3 className="mt-4 text-base font-semibold text-white">
-        {feature.title}
+    <div className="nx-card" style={{ ['--nx-accent' as string]: ACCENT_VAR[accent] }}>
+      <div className="nx-card-icon mb-4">{icon}</div>
+      <h3
+        className="text-base mb-2"
+        style={{ fontFamily: 'var(--nx-font-heading)', fontWeight: 600, color: 'var(--nx-ink-900)' }}
+      >
+        {title}
       </h3>
-      <p className="mt-2 text-sm leading-relaxed text-[#A0A0B8]">
-        {feature.description}
+      <p className="text-sm leading-relaxed" style={{ color: 'var(--nx-ink-600)' }}>
+        {description}
       </p>
     </div>
   );

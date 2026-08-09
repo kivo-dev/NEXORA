@@ -1,89 +1,47 @@
-import Link from "next/link";
-import { LogoMark } from "@/components/ui/LogoMark";
-import { Button } from "@/components/ui/Button";
+import Link from 'next/link';
+
+const NAV_LINKS = [
+  { label: 'Features', href: '#features' },
+  { label: 'How it works', href: '#how-it-works' },
+  { label: 'Trust', href: '#trust' },
+];
 
 export function Header() {
   return (
-    <header className="sticky top-0 z-50 border-b border-[#2A2A3A] bg-[#0A0A0F]/80 backdrop-blur-md">
-      {/* Pure-CSS mobile menu toggle — keeps this a Server Component */}
-      <input type="checkbox" id="nav-toggle" className="peer hidden" />
-
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6 lg:px-8">
+    <header className="nx-header sticky top-0 z-50">
+      <div className="mx-auto max-w-7xl px-6 lg:px-8 h-16 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2">
-          <LogoMark />
-          <span className="text-lg font-semibold tracking-tight">Nexora</span>
+          <span
+            className="w-7 h-7 rounded-full"
+            style={{
+              background: 'linear-gradient(135deg, var(--nx-blue-500), var(--nx-neon-cyan))',
+              boxShadow: '0 0 12px rgba(0, 229, 255, 0.55)',
+            }}
+          />
+          <span
+            className="text-lg"
+            style={{ fontFamily: 'var(--nx-font-heading)', fontWeight: 700, color: 'var(--nx-ink-900)' }}
+          >
+            Nexora
+          </span>
         </Link>
 
-        <nav className="hidden items-center gap-8 lg:flex">
-          <a
-            href="#features"
-            className="text-sm text-[#A0A0B8] transition-colors hover:text-white"
-          >
-            Features
-          </a>
-          <a
-            href="#how-it-works"
-            className="text-sm text-[#A0A0B8] transition-colors hover:text-white"
-          >
-            How it works
-          </a>
-          <a
-            href="#trust"
-            className="text-sm text-[#A0A0B8] transition-colors hover:text-white"
-          >
-            Trust
-          </a>
+        <nav className="hidden md:flex items-center gap-8">
+          {NAV_LINKS.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className="text-sm transition-colors"
+              style={{ fontFamily: 'var(--nx-font-heading)', color: 'var(--nx-ink-600)', fontWeight: 500 }}
+            >
+              {link.label}
+            </Link>
+          ))}
         </nav>
 
-        <div className="hidden lg:block">
-          <Button
-            href="/connect"
-            className="px-4 py-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#4A7BFF] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0A0A0F]"
-          >
-            login 
-          </Button>
-        </div>
-
-        <label
-          htmlFor="nav-toggle"
-          aria-label="Toggle menu"
-          className="-mr-2 cursor-pointer p-2 lg:hidden"
-        >
-          <svg
-            width="22"
-            height="22"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="#FFFFFF"
-            strokeWidth={1.8}
-            aria-hidden="true"
-          >
-            <path
-              strokeLinecap="round"
-              d="M3.75 6.75h16.5M3.75 12h16.5M3.75 17.25h16.5"
-            />
-          </svg>
-        </label>
-      </div>
-
-      <div className="hidden border-t border-[#2A2A3A] bg-[#0A0A0F] px-6 py-4 peer-checked:block lg:hidden">
-        <nav className="flex flex-col gap-4">
-          <a href="#features" className="text-sm text-[#A0A0B8] hover:text-white">
-            Features
-          </a>
-          <a
-            href="#how-it-works"
-            className="text-sm text-[#A0A0B8] hover:text-white"
-          >
-            How it works
-          </a>
-          <a href="#trust" className="text-sm text-[#A0A0B8] hover:text-white">
-            Trust
-          </a>
-          <Button href="/connect" className="mt-2 px-4 py-2.5 text-center">
-           Submit Wallet
-          </Button>
-        </nav>
+        <Link href="/dashboard" className="nx-btn-primary text-sm py-2 px-4">
+          Submit Wallet
+        </Link>
       </div>
     </header>
   );

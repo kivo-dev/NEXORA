@@ -1,0 +1,228 @@
+/* ============================================================
+   NEXORA — Icy Cosmic Theme (matched to reference sky/planets image)
+   Import this once in app/globals.css:  @import "../styles/nexora-theme.css";
+
+   SETUP: save the reference image as
+     public/backgrounds/nebula-sky.png
+   (or change --nx-bg-image below to whatever path you use).
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;600;700;800&family=Chakra+Petch:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap');
+
+:root {
+  /* -- Page background image, sampled from the reference art -- */
+  --nx-bg-image: url('/backgrounds/nebula-sky.jpg');
+
+  /* -- Overlay wash on top of the image: keeps text readable without
+        hiding the art. Lighter at the top, slightly whiter toward the
+        bottom where body copy tends to sit. -- */
+  --nx-bg-overlay: linear-gradient(
+    180deg,
+    rgba(235, 246, 255, 0.029) 0%,
+    rgba(235, 246, 255, 0.178) 55%,
+    rgba(245, 251, 255, 0.197) 100%
+  );
+
+  /* -- Structural blues, retinted icier/softer to match the art -- */
+  --nx-blue-900: #0a1f4d;
+  --nx-blue-700: #1c4fb8;
+  --nx-blue-500: #3b82f6;   /* primary action blue */
+  --nx-blue-300: #8fc3ff;
+  --nx-sky-400:  #5ec8ff;   /* sky-blue accent, matches the atmosphere in the art */
+  --nx-sky-200:  #cdeeff;
+
+  /* -- Ink -- */
+  --nx-ink-900: #0c2247;    /* headings over light sky */
+  --nx-ink-600: #3e5c85;    /* body text */
+  --nx-ink-400: #7796b8;    /* muted / captions */
+  --nx-border:  #d3e9fb;
+
+  /* -- Neon accents: cooler/icier set pulled from the art's own glow
+        (starlight cyan, aurora teal, deep-space indigo) plus two warm
+        outliers kept for card variety -- */
+  --nx-neon-blue:   #3b82f6;
+  --nx-neon-cyan:   #6fe6ff;   /* the star-glow cyan streaks in the image */
+  --nx-neon-teal:   #4fd9c0;   /* aurora-green edge of the nebula swirl */
+  --nx-neon-indigo: #6f7bff;   /* deep planet-shadow indigo */
+  --nx-neon-pink:   #ff6fc7;   /* muted, kept for contrast on one card */
+  --nx-neon-white:  #eaf7ff;   /* starlight-white glow, for a quiet card */
+
+  /* -- Candle chart colors (hero animation) — kept as functional green/red
+        but softened so they don't fight the icy palette -- */
+  --nx-candle-up:   #4fe0a0;
+  --nx-candle-down: #ff6b81;
+
+  /* -- Fonts -- */
+  --nx-font-display: 'Orbitron', 'Chakra Petch', system-ui, sans-serif; /* cosmic, glowing sci-fi headline face */
+  --nx-font-heading: 'Chakra Petch', system-ui, sans-serif;             /* cut-corner tech face for labels/nav */
+  --nx-font-body: 'Inter', system-ui, -apple-system, sans-serif;        /* readable body copy */
+}
+
+/* ============================================================
+   Base surfaces — apply to <body> / page wrapper / header.
+   The reference image becomes the whole-page background; every
+   section below (Hero, Trust, Features, HowItWorks) sits on top
+   of it because they all use this same .nx-page class.
+   ============================================================ */
+.nx-page {
+  background-image: var(--nx-bg-overlay), var(--nx-bg-image);
+  background-size: cover, cover;
+  background-position: center top, center top;
+  background-repeat: no-repeat, no-repeat;
+  background-attachment: fixed, fixed;
+  color: var(--nx-ink-900);
+  font-family: var(--nx-font-body);
+}
+
+.nx-header {
+  background: rgba(125, 152, 171, 0.411);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--nx-border);
+}
+
+/* Optional glass panel — drop text on the busier parts of the art
+   (e.g. straight over a planet) inside this for guaranteed contrast. */
+.nx-glass-panel {
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 20px;
+}
+
+/* ============================================================
+   Typography helpers
+   ============================================================ */
+.nx-display {
+  font-family: var(--nx-font-display);
+  letter-spacing: 0.02em;
+  line-height: 1.05;
+}
+
+.nx-eyebrow {
+  font-family: var(--nx-font-heading);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-size: 0.72rem;
+  color: var(--nx-blue-700);
+}
+
+/* Neon gradient text — use only on the ONE hero headline, not everywhere */
+.nx-glow-text {
+  background: linear-gradient(90deg, var(--nx-blue-700) 0%, var(--nx-blue-500) 40%, var(--nx-sky-400) 75%, var(--nx-neon-cyan) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 0 20px rgba(111, 230, 255, 0.45));
+}
+
+/* ============================================================
+   Neon card system — each card picks one accent variable,
+   base card body stays identical (same frosted-glass surface),
+   only the border + glow + icon chip differ.
+   Usage: <div class="nx-card" style="--nx-accent: var(--nx-neon-teal)">
+   ============================================================ */
+.nx-card {
+  --nx-accent: var(--nx-neon-blue);
+  background: rgba(255, 255, 255, 0.62);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--nx-border);
+  border-radius: 16px;
+  padding: 24px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 1px 2px rgba(10, 25, 48, 0.05);
+  transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+}
+
+.nx-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, var(--nx-accent), transparent 55%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.nx-card:hover {
+  border-color: var(--nx-accent);
+  box-shadow: 0 0 0 1px var(--nx-accent) inset, 0 8px 28px -8px var(--nx-accent);
+  transform: translateY(-2px);
+}
+
+.nx-card-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: color-mix(in srgb, var(--nx-accent) 16%, white);
+  color: var(--nx-accent);
+  filter: drop-shadow(0 0 6px color-mix(in srgb, var(--nx-accent) 65%, transparent));
+}
+
+/* ============================================================
+   Primary neon button (CTA)
+   ============================================================ */
+.nx-btn-primary {
+  font-family: var(--nx-font-heading);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  background: linear-gradient(90deg, var(--nx-blue-500), var(--nx-sky-400));
+  color: #ffffff;
+  border-radius: 10px;
+  padding: 12px 24px;
+  box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.25), 0 8px 24px -6px rgba(94, 200, 255, 0.55);
+  transition: box-shadow 180ms ease, transform 180ms ease;
+}
+
+.nx-btn-primary:hover {
+  box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.4), 0 10px 30px -4px rgba(111, 230, 255, 0.7);
+  transform: translateY(-1px);
+}
+
+/* ============================================================
+   Terminal cursor + subtle idle motion for the hero candlestick
+   ============================================================ */
+.nx-terminal-cursor {
+  display: inline-block;
+  width: 2px;
+  height: 0.9em;
+  margin-left: 2px;
+  vertical-align: -0.1em;
+  background: var(--nx-blue-500);
+  animation: nx-blink 1s steps(1) infinite;
+}
+
+@keyframes nx-blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+
+.nx-float-subtle {
+  animation: nx-float 7s ease-in-out infinite, nx-pulse-opacity 5s ease-in-out infinite;
+}
+
+@keyframes nx-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes nx-pulse-opacity {
+  0%, 100% { opacity: 0.92; }
+  50% { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nx-terminal-cursor,
+  .nx-float-subtle {
+    animation: none;
+  }
+}

@@ -1,4 +1,6 @@
+@import "./nexora-theme.css";
 @import "tailwindcss";
+
 
 :root {
   --background: #ffffff;
